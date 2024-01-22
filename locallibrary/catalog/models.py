@@ -3,38 +3,23 @@ from django.urls import reverse
 import uuid
 
 
-class Genre(models.Model):
-    """Model representing a book genre."""
-    name = models.CharField(
-        max_length=200,
-        unique=True,
-        help_text="Enter a book genre (e.g. Science Fiction, French Poetry, etc.)"
-    )
+class Author(models.Model):
+    """Model representing an author."""
+    first_name = models.CharField(max_length=100)
+    last_name = models.CharField(max_length=100)
+    date_of_birth = models.DateField(null=True, blank=True)
+    date_of_death = models.DateField('Died', null=True, blank=True)
+
+    class Meta:
+        ordering = ['last_name', 'first_name']
 
     def __str__(self):
         """String for representing the Model object."""
-        return self.name
+        return f'{self.last_name}, {self.first_name}'
 
     def get_absolute_url(self):
-        """Returns the URL to access a particular genre instance."""
-        return reverse('genre-detail', args=[str(self.id)])
-
-
-class Language(models.Model):
-    """Model representing a Language (e.g. English, French, Japanese, etc.)"""
-    name = models.CharField(
-        max_length=200,
-        unique=True,
-        help_text="Enter the book's natural language (e.g. English, French, Japanese, etc.)"
-    )
-    
-    def __str__(self):
-        """String for representing the Model object."""
-        return self.name
-
-    def get_absolute_url(self):
-        """Returns the URL to access a particular language instance."""
-        return reverse('language-detail', args=[str(self.id)])
+        """Returns the URL to access a particular author instance."""
+        return reverse('author-detail', args=[str(self.id)])
 
 
 class Book(models.Model):
@@ -54,7 +39,7 @@ class Book(models.Model):
         help_text="13 character <a href='https://isbnsearch.org/'>ISBN number</a>"
     )
 
-    genre = models.ManyToManyField(Genre, help_text="Select a genre for this book")
+    genre = models.ManyToManyField('Genre', help_text="Select a genre for this book")
     language = models.ForeignKey('Language', on_delete=models.SET_NULL, null=True)
     
     def __str__(self):
@@ -70,6 +55,7 @@ class Book(models.Model):
         return ', '.join(genre.name for genre in self.genre.all()[:3])
     
     display_genre.short_description = 'Genre'
+
 
 class BookInstance(models.Model):
     """Model representing a specific copy of a book (i.e. that can be borrowed from the library)."""
@@ -103,24 +89,39 @@ class BookInstance(models.Model):
 
     def __str__(self):
         """String for representing the Model object."""
-        return f'{self.id} ({self.book.title})'
+        return f'{self.book.title} ({self.id})'
 
 
-class Author(models.Model):
-    """Model representing an author."""
-    first_name = models.CharField(max_length=100)
-    last_name = models.CharField(max_length=100)
-    date_of_birth = models.DateField(null=True, blank=True)
-    date_of_death = models.DateField('Died', null=True, blank=True)
-
-    class Meta:
-        ordering = ['last_name', 'first_name']
+class Genre(models.Model):
+    """Model representing a book genre."""
+    name = models.CharField(
+        max_length=200,
+        unique=True,
+        help_text="Enter a book genre (e.g. Science Fiction, French Poetry, etc.)"
+    )
 
     def __str__(self):
         """String for representing the Model object."""
-        return f'{self.last_name}, {self.first_name}'
+        return self.name
 
     def get_absolute_url(self):
-        """Returns the URL to access a particular author instance."""
-        return reverse('author-detail', args=[str(self.id)])
+        """Returns the URL to access a particular genre instance."""
+        return reverse('genre-detail', args=[str(self.id)])
+
+
+class Language(models.Model):
+    """Model representing a Language (e.g. English, French, Japanese, etc.)"""
+    name = models.CharField(
+        max_length=200,
+        unique=True,
+        help_text="Enter the book's natural language (e.g. English, French, Japanese, etc.)"
+    )
+    
+    def __str__(self):
+        """String for representing the Model object."""
+        return self.name
+
+    def get_absolute_url(self):
+        """Returns the URL to access a particular language instance."""
+        return reverse('language-detail', args=[str(self.id)])
 
