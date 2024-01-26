@@ -17,6 +17,9 @@ class Author(models.Model):
         """String for representing the Model object."""
         return f'{self.last_name}, {self.first_name}'
 
+    def life(self):
+        return f'{self.date_of_birth} - {self.date_of_death or ""}'
+
     def get_absolute_url(self):
         """Returns the URL to access a particular author instance."""
         return reverse('author-detail', args=[str(self.id)])
