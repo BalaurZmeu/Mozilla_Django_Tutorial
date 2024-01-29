@@ -29,6 +29,14 @@
             {% if user.is_authenticated %}
               <li>User: {{ user.get_username }}</li>
               
+              {% for group in request.user.groups.all %}
+              {% if group.name == 'Librarians' %}
+              <li>
+              Hallo!
+              </li>
+              {% endif %}
+              {% endfor %}
+              
               <li>
                 <a href="{% url 'my-borrowed' %}">
                   My Borrowed

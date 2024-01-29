@@ -67,3 +67,4 @@ class LoanedBooksByUserListView(LoginRequiredMixin, generic.ListView):
             .filter(status__exact='o')
             .order_by('due_back')
         )
+
