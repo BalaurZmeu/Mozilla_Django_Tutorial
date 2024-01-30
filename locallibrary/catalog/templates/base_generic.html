@@ -32,7 +32,9 @@
               {% for group in request.user.groups.all %}
               {% if group.name == 'Librarians' %}
               <li>
-              Hallo!
+                <a href="{% url 'all-borrowed' %}">
+                  All Borrowed
+                </a>
               </li>
               {% endif %}
               {% endfor %}

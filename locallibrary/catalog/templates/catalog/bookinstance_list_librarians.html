@@ -1,7 +1,7 @@
 {% extends "base_generic.html" %}
 
 {% block content %}
-  <h1>My Borrowed Books</h1>
+  <h1>All Borrowed Books</h1>
   
   {% if bookinstance_list %}
   <ul>
@@ -11,7 +11,8 @@
       <a href="{% url 'book-detail' bookinst.book.pk %}">
         {{ bookinst.book.title }}
       </a>
-      ({{ bookinst.due_back }})
+      ({{ bookinst.due_back }}),
+      - <strong>{{ bookinst.borrower }}</strong>
     </li>
   {% endfor %}
   </ul>
